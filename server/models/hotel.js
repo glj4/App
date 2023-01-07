@@ -9,7 +9,7 @@ const HotelSchema = new Schema({
     price: { type: Number, required: true },
     people: { type: Number, required: true },
     rooms: { type: Number, required: true },
-    bookings: { type: Array, required: false },
+    bookings: { type: JSON, required: false },
     images: { type: Array, required: false },
     parking: { type: Boolean, required: false },
     buffet: { type: Boolean, required: false },

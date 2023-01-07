@@ -32,17 +32,18 @@ houseCtrl.createHouse = async (req, res) => {
 
 houseCtrl.updateHouse = async (req, res) => {
     const { id } = req.params;
+    const houseSaved = await House.findById(id);
     const house = {
-        name: req.body.name,
-        description: req.body.description,
-        location: req.body.location,
-        price: req.body.price,
-        people: req.body.people,
-        available: req.body.available,
-        rooms: req.body.rooms,
-        bookings: req.body.bookings,
-        images: req.body.images,
-        baths: req.body.baths,
+        name: req.body.name != undefined ? req.body.name : houseSaved.name,
+        description: req.body.description != undefined ? req.body.description : houseSaved.description,
+        location: req.body.location != undefined ? req.body.location : houseSaved.location,
+        price: req.body.price != undefined ? req.body.price : houseSaved.price,
+        people: req.body.people != undefined ? req.body.people : houseSaved.people,
+        rooms: req.body.rooms != undefined ? req.body.rooms : houseSaved.rooms,
+        bookings: req.body.bookings != undefined ? req.body.bookings : houseSaved.bookings,
+        images: req.body.images != undefined ? req.body.images : houseSaved.images,
+        baths: req.body.baths != undefined ? req.body.baths : houseSaved.baths,
+        ubication: req.body.ubication != undefined ? req.body.ubication : houseSaved.ubication
     };
     await House.findByIdAndUpdate(id, {$set: house}, {new: true});
     res.json({status: 'House update'});

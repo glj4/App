@@ -40,15 +40,15 @@
           <ion-label style="align-items: center; align-content:center;">Próximas reservas</ion-label>
           <br>
           <br>
-          <ion-label class="valores" *ngIf="user != undefined && user.bookings != undefined">{{user.bookings}}</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.bookings != undefined">{{user.bookings.length}}</ion-label>
           <ion-label class="valores" *ngIf="user != undefined && user.bookings == undefined">0</ion-label>
         </ion-col>
         <ion-col class="seccion" style="margin-right:5px;">
           <ion-label>Viajes publicados</ion-label>
           <br>
           <br>
-          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished != undefined">{{user.tripsPublished}}</ion-label>
-          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished == undefined">1</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished != undefined">{{user.tripsPublished.length}}</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished == undefined">0</ion-label>
         </ion-col>
         <ion-col class="seccion">
           <div style="margin-top:15px;">

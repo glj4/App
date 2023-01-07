@@ -32,18 +32,19 @@ hotelCtrl.createHotel = async (req, res) => {
 
 hotelCtrl.updateHotel = async (req, res) => {
     const { id } = req.params;
+    const hotelSaved = await Hotel.findById(id);
     const hotel = {
-        name: req.body.name,
-        description: req.body.description,
-        location: req.body.location,
-        price: req.body.price,
-        people: req.body.people,
-        available: req.body.available,
-        rooms: req.body.rooms,
-        bookings: req.body.bookings,
-        images: req.body.images,
-        parking: req.body.parking,
-        buffet: req.body.buffet
+        name: req.body.name != undefined ? req.body.name : hotelSaved.name,
+        description: req.body.description != undefined ? req.body.description : hotelSaved.description,
+        location: req.body.location != undefined ? req.body.location : hotelSaved.location,
+        price: req.body.price != undefined ? req.body.price : hotelSaved.price,
+        people: req.body.people != undefined ? req.body.people : hotelSaved.people,
+        rooms: req.body.rooms != undefined ? req.body.rooms : hotelSaved.rooms,
+        bookings: req.body.bookings != undefined ? req.body.bookings : hotelSaved.bookings,
+        images: req.body.images != undefined ? req.body.images : hotelSaved.images,
+        parking: req.body.parking != undefined ? req.body.parking : hotelSaved.parking,
+        buffet: req.body.buffet != undefined ? req.body.buffet : hotelSaved.buffet,
+        ubication: req.body.ubication != undefined ? req.body.ubication : hotelSaved.ubication
     };
     await Hotel.findByIdAndUpdate(id, {$set: hotel}, {new: true});
     res.json({status: 'Hotel update'});

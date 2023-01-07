@@ -40,6 +40,8 @@ export class InfoHotelPage implements OnInit {
   roomsAvailable: number = 0;
   doBooking: boolean = false;
   points: number = 0;
+  noches: number;
+  precioNoches: number;
 
   constructor(
     private hotelSvc: HotelsService,
@@ -340,21 +342,79 @@ export class InfoHotelPage implements OnInit {
           
           if ((dateInFormat.getTime() < bookingDateIn.getTime() && dateOutFormat.getTime() < bookingDateIn.getTime()) ||
               (dateInFormat.getTime() > bookingDateOut.getTime() && dateOutFormat.getTime() > bookingDateOut.getTime())) {
-                if (cont < hotel.rooms) {
-                  this.roomsAvailable++;
-                }
+                console.log('hola');
               }
               else {
                 cont++;
               }
         }
+        if (cont >= hotel.rooms) {
+          this.roomsAvailable = 0;
+        }
+        else {
+          this.roomsAvailable = hotel.rooms - cont;
+        }
       }
     });
   }
 
-  realizarReserva(id: string) {
+  gestionarReserva() {
     this.doBooking = true;
-    console.log(id);
+    this.noches = this.calcularNoches();
+    this.precioNoches = this.calcularPrecio();
+  }
+
+  calcularNoches() {
+    const dayIn = Number.parseInt(this.dateIn.split('/')[0]);
+    const monthIn = Number.parseInt(this.dateIn.split('/')[1]);
+    const yearIn = Number.parseInt(this.dateIn.split('/')[2]);
+    var dateInFormat = new Date(yearIn, monthIn-1, dayIn);
+    const dayOut = Number.parseInt(this.dateOut.split('/')[0]);
+    const monthOut = Number.parseInt(this.dateOut.split('/')[1]);
+    const yearOut = Number.parseInt(this.dateOut.split('/')[2]);
+    var dateOutFormat = new Date(yearOut, monthOut-1, dayOut);
+    var diff = dateOutFormat.getTime() - dateInFormat.getTime();
+    return diff/(1000*60*60*24);
+  }
+
+  calcularPrecio() {
+    return this.noches*this.hotel.price;
+  }
+
+  realizarReserva(id: string) {
+    var forma = {
+      startDatetime: this.dateIn,
+      endDatetime: this.dateOut
+    }
+    var bookings: any[] = [];
+    if (this.hotel.bookings != undefined) {
+      for (let booking of this.hotel.bookings) {
+        bookings.push(booking);
+      }
+    }
+    bookings.push(forma);
+    this.hotelSvc.updateHotel(id, {bookings:bookings})
+    .subscribe(() => {
+      console.log('Reserva guardada en hotel');
+    });
+    const email = localStorage.getItem('email');
+    var bookingsUser: any[] = [];
+    this.userSvc.getUserByEmail(email)
+      .subscribe((user) => {
+        if (user['bookings'] != undefined) {
+          for (let booking of user['bookings']) {
+            bookingsUser.push(booking);
+          }
+        }
+        bookingsUser.push(forma);
+        this.userSvc.editUser(user['_id'], {bookings:bookingsUser})
+        .subscribe(() => {
+          console.log('Reserva guardada en usuario');
+        })
+      });
+    this.router.navigate(['/tabs/main-page']);
+    this.doBooking = false;
+    this.checkAvailable = false;
   }
 
   goBack() {

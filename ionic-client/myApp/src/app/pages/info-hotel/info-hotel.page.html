@@ -84,7 +84,7 @@
         <div class="rooms">
           <h4>{{roomsAvailable}}</h4>
         </div>
-        <ion-button style="margin-top:20px;" class="ion-button-like" expand="block" size="small" block (click)="realizarReserva(hotel._id)">Realizar reserva</ion-button>
+        <ion-button style="margin-top:20px;" class="ion-button-like" expand="block" size="small" block (click)="gestionarReserva()">Realizar reserva</ion-button>
       </div>
       <div *ngIf="roomsAvailable == 0">
         <ion-label class="text-red">Lo sentimos, para estas fechas no hay habitaciones disponibles</ion-label>
@@ -102,7 +102,7 @@
               <ion-label style="margin-left:20px;" >Fecha</ion-label>
             </ion-col>
             <ion-col>
-              <ion-label style="margin-left:-40px;">{{dateIn}} - {{dateOut}}</ion-label>
+              <ion-label style="text-align:right;">{{dateIn}} - {{dateOut}}</ion-label>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -110,15 +110,15 @@
               <ion-label style="margin-left:20px;">Habitaciones</ion-label>
             </ion-col>
             <ion-col>
-              <ion-label style="margin-left:120px;">1</ion-label>
+              <ion-label style="text-align:right; margin-left:130px;">1</ion-label>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
               <ion-label style="margin-left:20px;">Noches</ion-label>
             </ion-col>
-            <ion-col>
-              <ion-label style="margin-left:120px;">3</ion-label>
+            <ion-col *ngIf="noches != undefined">
+              <ion-label style="text-align:right; margin-left:130px;">{{noches}}</ion-label>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -126,7 +126,7 @@
               <ion-label style="margin-left:20px;">Precio</ion-label>
             </ion-col>
             <ion-col>
-              <ion-label style="margin-left:60px;">{{hotel.price}}€/noche</ion-label>
+              <ion-label style="text-align:right; margin-left:70px;">{{hotel.price}}€/noche</ion-label>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -144,12 +144,12 @@
           <ion-col size="8">
             <ion-label style="font-size:14px;">TOTAL A PAGAR</ion-label>
           </ion-col>
-          <ion-col>
-            <ion-label style="font-size:14px;">198€</ion-label>
+          <ion-col *ngIf="precioNoches != undefined">
+            <ion-label style="font-size:14px;">{{precioNoches}}€</ion-label>
           </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-button style="margin-top:10px;" class="ion-button-like" expand="block" size="small" block>Reservar</ion-button>
+      <ion-button style="margin-top:10px;" class="ion-button-like" expand="block" size="small" block (click)="realizarReserva(hotel._id)">Reservar</ion-button>
     </div>
   </div>
 </ion-content>
