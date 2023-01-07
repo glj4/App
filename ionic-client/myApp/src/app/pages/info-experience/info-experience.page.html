@@ -1,0 +1,35 @@
+<ion-content>
+  <div style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/tabs/main-page']">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <div style="text-align:right;">
+    <a>
+      <ion-icon class="icon-favourite" [name]="heartIcon" (click)="addOrDeleteFavourite()"></ion-icon>
+    </a>
+  </div>
+  <div class="content" *ngIf="experience != undefined">
+    <ion-item-sliding>
+      <ion-slides pager="true">
+        <ion-slide *ngFor="let image of experience.images">
+          <img [src]="image"/>
+        </ion-slide>
+      </ion-slides>
+    </ion-item-sliding>
+    <div style="text-align:right; margin-top:5px;">
+      <ion-label style="font-size:10px; margin-right:10px;">Experiencia creada por {{experience.user}}</ion-label>
+    </div>
+    <hr style="margin-top:5px;">
+    <ion-label>{{experience.title}}</ion-label>
+    <br>
+    <textarea>{{experience.description}}</textarea>
+    <hr>
+    <ion-label style="margin-left: 10px">Gasto total aproximado</ion-label>
+    <ion-label style="margin-left: 70px">{{experience.finalPrice}}€</ion-label>
+    <hr>
+    <ion-button *ngIf="!liked" class="ion-button-like" expand="block" size="small" block (click)="like(experience.user)">¡Me gusta!</ion-button>
+    <ion-button *ngIf="liked" class="ion-button-liked" expand="block" size="small" block>¡Te gusta!</ion-button>
+  </div>
+</ion-content>

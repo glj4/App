@@ -1,0 +1,83 @@
+<ion-content>
+  <div style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/tabs/profile']">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <ion-card-content style="margin-right: 15px; margin-left: 15px; margin-top: 10px;">
+    <a (click)="changePhoto()">
+      <ion-avatar class="avatar">
+        <ion-img *ngIf="photo != undefined" src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"></ion-img>
+        <ion-img *ngIf="photo == undefined" src="../../assets/perfil.png"></ion-img>
+      </ion-avatar>
+    </a>
+    <form [formGroup]="orderForm" (ngSubmit)="updateProfile();">
+      <ion-list class="content">
+        <ion-grid *ngIf="user != undefined && !modifyName">
+          <ion-row>
+            <ion-input class="label">{{user.name}}</ion-input>
+            <a class="icon-pencil" (click)="editName()">
+              <ion-icon name="pencil-outline"></ion-icon>
+            </a>
+          </ion-row>
+        </ion-grid>
+        <ion-item *ngIf="user != undefined && modifyName">
+          <ion-input class="label-buttons" type="text" formControlName="name" placeholder="{{user.name}}" required></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="modifyName && isModified && errorControl.name.errors?.required">Campo obligatorio</span>
+        <ion-grid *ngIf="user != undefined && user.surname != undefined && user.surname != '' && !modifySurname">
+          <ion-row>
+            <ion-input class="label">{{user.surname}}</ion-input>
+            <a class="icon-pencil" (click)="editSurname()">
+              <ion-icon name="pencil-outline"></ion-icon>
+            </a>
+          </ion-row>
+        </ion-grid>
+        <ion-item *ngIf="user != undefined && user.surname != undefined && user.surname != '' && modifySurname">
+          <ion-input class="label-buttons" type="text" formControlName="surname" placeholder="{{user.surname}}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="user != undefined && (user.surname == undefined || user.surname == '')">
+          <ion-input class="label-buttons" type="text" formControlName="surname" placeholder="Apellido"></ion-input>
+        </ion-item>
+        <ion-grid *ngIf="user != undefined && user.phone != undefined && user.phone != '' && !modifyPhone">
+          <ion-row>
+            <ion-input class="label">{{user.phone}}</ion-input>
+            <a class="icon-pencil" (click)="editPhone()">
+              <ion-icon name="pencil-outline"></ion-icon>
+            </a>
+          </ion-row>
+        </ion-grid>
+        <ion-item *ngIf="user != undefined && user.phone != undefined && user.phone != '' && modifyPhone">
+          <ion-input class="label-buttons" type="text" formControlName="phone" placeholder="{{user.phone}}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="user != undefined && (user.phone == undefined || user.phone == '')">
+          <ion-input class="label-buttons" type="text" formControlName="phone" placeholder="Teléfono de contacto"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isModified && (errorControl.phone.errors?.pattern || (errorControl.phone.errors?.minlength || errorControl.phone.errors?.maxlength))">Introduzca un teléfono de contacto válido</span>
+        <ion-input style="margin-left:5px;" class="label" *ngIf="user != undefined">{{user.email}}</ion-input>
+        <ion-grid style="margin-left:-5px;" *ngIf="user != undefined && !modifyPassword">
+          <ion-row>
+            <ion-input class="label" type="password" value="password"></ion-input>
+            <a class="icon-pencil" (click)="editPassword()">
+              <ion-icon name="pencil-outline"></ion-icon>
+            </a>
+          </ion-row>
+        </ion-grid>
+        <ion-item *ngIf="user != undefined && modifyPassword">
+          <ion-input class="label-buttons" [type]="passwordType1" formControlName="password" placeholder="Contraseña" required></ion-input>
+          <ion-icon class="icon-eye" item-end [name]="passwordIcon1" (click)="hideShowPassword1()"></ion-icon>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="modifyPassword && isModified && errorControl.password.errors?.required">Campo obligatorio</span>
+        <ion-item *ngIf="user != undefined && modifyPassword">
+          <ion-input class="label-buttons" [type]="passwordType2" formControlName="repeatPassword" placeholder="Repetir contraseña" required></ion-input>
+          <ion-icon class="icon-eye" item-end [name]="passwordIcon2" (click)="hideShowPassword2()"></ion-icon>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="modifyPassword && isModified && errorControl.repeatPassword.errors?.required">Campo obligatorio</span>
+        <span class="field-validator error ion-padding" *ngIf="modifyPassword && isModified && !orderForm.get('repeatPassword').errors && orderForm.hasError('passwordNotMatch')">Las contraseñas no coinciden</span>
+      </ion-list>
+      <ion-button type="submit" class="ion-button-save" expand="block" size="small" block>Guardar</ion-button>
+      <ion-button class="ion-button-delete" expand="block" size="small" block (click)="presentAlert(user._id)">Eliminar cuenta</ion-button>
+    </form>
+  </ion-card-content>
+</ion-content>

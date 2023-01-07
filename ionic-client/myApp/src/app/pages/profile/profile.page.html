@@ -1,0 +1,66 @@
+<ion-content>
+  <div style="margin-top:20px;">
+    <a style="margin-left:30px;" class="ion-link-back" [routerLink]="['/tabs/main-page']">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+    <a style="margin-left:270px;" (click)="showOptions();">
+      <ion-icon style="color:#AAAAAA; font-size:25px; margin-top:-20px;" name="reorder-three-outline"></ion-icon>
+      <div [hidden]="show == false">
+        <ion-grid>
+          <ion-row class="opciones">
+            <a style="margin-left:5px; color:#000000;" (click)="editarPerfil(user._id)">Editar perfil</a>
+          </ion-row>
+          <ion-row class="opciones">
+            <a style="margin-left:5px; color:#000000;" (click)="presentAlert(user._id)">Eliminar cuenta</a>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </a>
+  </div>
+  <ion-avatar class="avatar">
+    <ion-img *ngIf="photo != undefined" src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"></ion-img>
+    <ion-img *ngIf="photo == undefined" src="../../assets/perfil.png"></ion-img>
+  </ion-avatar>
+  <div class="centrado">
+    <h4 class="name-surname" *ngIf="user != undefined && user.name != undefined && user.surname != undefined">{{user.name}} {{user.surname}}</h4>
+    <h4 class="name-surname" *ngIf="user != undefined && user.name != undefined && user.surname == undefined">{{user.name}}</h4>
+    <ion-grid>
+      <ion-row class="seccion">
+        <ion-col>
+          <ion-label style="font-size:14px;">Mis puntos</ion-label>
+          <br>
+          <br>
+          <ion-label class="valores" *ngIf="user != undefined && user.points != undefined">{{user.points}}</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.points == undefined">0</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-right:15px; margin-left:15px;">
+        <ion-col class="seccion" style="margin-right:5px;">
+          <ion-label style="align-items: center; align-content:center;">Próximas reservas</ion-label>
+          <br>
+          <br>
+          <ion-label class="valores" *ngIf="user != undefined && user.bookings != undefined">{{user.bookings}}</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.bookings == undefined">0</ion-label>
+        </ion-col>
+        <ion-col class="seccion" style="margin-right:5px;">
+          <ion-label>Viajes publicados</ion-label>
+          <br>
+          <br>
+          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished != undefined">{{user.tripsPublished}}</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished == undefined">1</ion-label>
+        </ion-col>
+        <ion-col class="seccion">
+          <div style="margin-top:15px;">
+            <ion-label>Quiero ir</ion-label>
+            <br>
+            <br>
+            <ion-label class="valores" *ngIf="user != undefined && user.favorites != undefined">{{user.favorites.length}}</ion-label>
+            <ion-label class="valores" *ngIf="user != undefined && user.favorites == undefined">0</ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <br>
+</ion-content>

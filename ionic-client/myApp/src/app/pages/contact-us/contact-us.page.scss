@@ -1,0 +1,116 @@
+.logo {
+    text-align: left;
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+.title {
+    text-align: left;
+    color: #0021F5;
+    font-size: 40px;
+    font-family: 'aclonica';
+    margin-left: 62px;
+    margin-top: -45px;
+}
+
+.title_a {
+    text-align: right;
+    color: #78D7FF;
+    font-size: 40px;
+    font-family: 'aclonica';
+    margin-top: -45px;
+}
+
+.label-contact {
+    font-family: 'aclonica';
+    font-size: 13px;
+}
+
+.label-text {
+    font-family: 'aclonica';
+    font-size: 10px;
+    font-style: italic;
+    color: #AAAAAA;
+}
+
+.label-buttons {
+    font-family: 'aclonica';
+    font-size: 13px;
+    color: #000000;
+    margin-top: 10px;
+    --placeholder-color: #AAAAAA;
+    --placeholder-opacity: 1;
+}
+
+.ion-link-back {
+    color: #AAAAAA;
+    font-family: 'aclonica';
+    font-size: 12px;
+}
+
+.icon {
+    color: #AAAAAA;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+.time {
+    font-family: 'aclonica';
+    font-size: 12px;
+}
+
+.icon-bar {
+    font-size: 15px;
+    color:#000000;
+    text-align: right;
+    margin-top: -27px;
+    margin-right: 15px;
+}
+
+.field-validator {
+    font-family: 'aclonica';
+    color: red;
+    font-size: 10px;
+}
+
+.label-text {
+    font-family: 'aclonica';
+    font-size: 10px;
+    font-style: italic;
+    color: #AAAAAA;
+}
+
+.ion-textarea {
+    font-family: 'aclonica';
+    font-size: 12px;
+    color: #000000;
+    --placeholder-color: #AAAAAA;
+    --placeholder-opacity: 1;
+    height:150px;
+    width: 280px;
+    max-width: 280px;
+    margin-top: 25px;
+    border-color: #AAAAAA;
+}
+
+::placeholder {
+    color: #AAAAAA
+}
+
+.ion-button-contact {
+    --background: #0021F5;
+    --color: #FFFFFF;
+    --border-radius: 5px;
+    font-family: 'aclonica';
+    text-transform: none;
+}
+
+.label-email {
+    font-family: 'aclonica';
+    font-size: 13px;
+    color: #000000;
+    margin-top: 10px;
+    --placeholder-opacity: 1;
+}

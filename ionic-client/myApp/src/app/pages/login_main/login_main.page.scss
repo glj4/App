@@ -1,0 +1,79 @@
+.background {
+    --background: 0 0/100% 100% no-repeat;
+    background-color: #78D7FF;
+}
+
+.logo {
+    text-align: left;
+    width: 50px;
+    height: 50px;
+    margin-top: 190px;
+    margin-left: 25px;
+}
+
+.title {
+    text-align: left;
+    color: white;
+    font-size: 40px;
+    font-family: 'aclonica';
+    margin-left: 62px;
+    margin-top: -45px;
+}
+
+.title_a {
+    text-align: right;
+    color: #0021F5;
+    font-size: 40px;
+    font-family: 'aclonica';
+    margin-top: -45px;
+}
+
+.ion-button-signup {
+    --background: #FFFFFF;
+    --color: #78D7FF;
+    --border-radius: 5px;
+    font-family: 'aclonica';
+    text-transform: none;
+    margin-top: 200px;
+}
+
+.ion-button-signin {
+    --background: #78D7FF;
+    --color: #FFFFFF;
+    --border-radius: 5px;
+    --border-color: #FFFFFF;
+    --border-style: solid;
+    --border-width: 2px;
+    font-family: 'aclonica';
+    text-transform: none;
+    margin-top: 10px;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid #FFFFFF;
+    margin-top: 20px;
+}
+
+.ion-link-contact {
+    color: #FFFFFF;
+    font-family: 'aclonica';
+    font-size: 12px;
+    text-transform: none;
+}
+
+.time {
+    font-family: 'aclonica';
+    font-size: 12px;
+    color: #FFFFFF;
+}
+
+.icon-bar {
+    font-size: 15px;
+    color:#FFFFFF;
+    text-align: right;
+    margin-top: -27px;
+    margin-right: 15px;
+}

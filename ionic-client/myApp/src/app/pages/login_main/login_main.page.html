@@ -1,0 +1,17 @@
+<ion-content class="background">
+  <ion-card-header>
+    <img class="logo" src="../../assets/logo1.png"/>
+    <ion-title class="title">TURISTE</ion-title>
+    <ion-title class="title_a">A</ion-title>
+    <div padding *ngIf="_usuario.comprobarLogin() == false">
+      <ion-button class="ion-button-signup" expand="block" size="small" block [routerLink]="['/signup']">Registrarme</ion-button>
+    </div>
+    <div padding *ngIf="_usuario.comprobarLogin() == false">
+      <ion-button class="ion-button-signin" expand="block" size="small" block [routerLink]="['/login']">Iniciar sesión</ion-button>
+    </div>
+    <hr />
+    <div style="text-align: center;">
+      <a class="ion-link-contact" [routerLink]="['/contact-us']">Contacta con nosotros</a>
+    </div>
+  </ion-card-header>
+</ion-content>

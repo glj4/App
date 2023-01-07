@@ -1,0 +1,86 @@
+<ion-content>
+  <div class="icon" *ngIf="_usuario.comprobarLogin() == true">
+    <a class="ion-link-back" (click)="presentAlert()">
+      <ion-icon class="icon" name="log-out-outline"></ion-icon>
+    </a>
+  </div>
+  <ion-card-header>
+    <img class="logo" src="../../assets/logo2.png"/>
+    <ion-title class="title">TURISTE</ion-title>
+    <ion-title class="title_a">A</ion-title>
+  </ion-card-header>
+  <div class="content">
+    <ion-grid>
+      <ion-row>
+        <ion-col style="margin-left:7px;margin-right:7px;" class="search-location">
+          <ion-icon style="margin-left:10px;" class="icon-people" name="search"></ion-icon>
+          <ion-input class="searchinput" placeholder="¿Dónde desea viajar?" (ionChange)="buscar($event)"></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-left:7px;margin-right:7px;">
+        <ion-col class="search-dateIn">
+          <ion-icon *ngIf="showInIcon == true" class="icon-people" name="calendar-clear-outline"></ion-icon>
+          <div style="margin-left:-20px; width:97px;">
+            <ion-datetime [(ngModel)]="dateInSearch" cancel-text="Cancelar" done-text="Aceptar" [min]="myDate" [max]="2030" placeholder="Entrada" [pickerOptions]="customPickerOptionDateIn"></ion-datetime>
+          </div>
+        </ion-col>
+        <ion-col class="search-dateOut">
+          <ion-icon *ngIf="showOutIcon == true" class="icon-people" name="calendar-clear-outline"></ion-icon>
+          <div style="margin-left:-20px; width:97px;">
+            <ion-datetime [(ngModel)]="dateOutSearch" cancel-text="Cancelar" done-text="Aceptar" [min]="followingDay" [max]="2030" placeholder="Salida" [pickerOptions]="customPickerOptionDateOut"></ion-datetime>
+          </div>
+        </ion-col>
+        <ion-col class="search-people" size="auto">
+          <ion-icon class="icon-people" name="accessibility-outline"></ion-icon>
+          <div style="margin-left:-20px; width:60px;">
+            <ion-select okText="Aceptar" cancelText="Cancelar" class="select-people" (ionChange)="buscarViajeros($event)">
+              <ion-select-option *ngFor="let number of numbers" value="{{ number }}">{{ number }}</ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <hr>
+    <ion-label>Experiencias de otros usuarios</ion-label>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-segment scrollable>
+            <a style="margin-right:15px" *ngFor="let experience of sortExperiences() | filtro: textoBuscar: 'location'" (click)="routeExperience(experience._id)">
+                <img [src]="experience.images[0]"/>
+                <h4 class="text-block">{{experience.location}}</h4>
+            </a>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <hr>
+    <ion-label>Hoteles</ion-label>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-segment scrollable>
+            <a style="margin-right:15px" *ngFor="let hotel of sortHotels() | filtro: textoBuscar: 'location' | filtroViajeros: numViajeros: 'people' | filtroFechasCasa: dateIn: dateOut" (click)="routeHotel(hotel._id)">
+                <img [src]="hotel.images[0]"/>
+                <h4 class="text-block">{{hotel.location}}</h4>
+            </a>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <hr>
+    <ion-label>Casas rurales</ion-label>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-segment scrollable>
+            <a style="margin-right:15px" *ngFor="let house of sortHouses() | filtro: textoBuscar: 'location' | filtroViajeros: numViajeros: 'people' | filtroFechas: dateIn: dateOut" (click)="routeHouse(house._id)">
+                <img [src]="house.images[0]"/>
+                <h4 class="text-block">{{house.location}}</h4>
+            </a>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

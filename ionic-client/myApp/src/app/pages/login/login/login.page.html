@@ -1,0 +1,40 @@
+<ion-content>
+  <div style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/']" (click)="clearForm()">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <ion-card-header>
+    <img class="logo" src="../../assets/logo2.png"/>
+    <ion-title class="title">TURISTE</ion-title>
+    <ion-title class="title_a">A</ion-title>
+  </ion-card-header>
+  <ion-card-content style="margin-right: 15px; margin-left: 15px; margin-top: 10px;">
+    <ion-label class="label-login">Inicia sesión en Turistea</ion-label>
+    <form [formGroup]="orderForm" (ngSubmit)="signIn();">
+      <ion-list>
+        <ion-item>
+          <ion-input class="label-buttons" type="text" formControlName="email" placeholder="Email" (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignin && errorControl.email.errors?.required">Introduzca email</span>
+        <span class="field-validator error ion-padding" *ngIf="isSignin && errorControl.email.errors?.pattern">Introduce un email válido</span>
+        <ion-item>
+          <ion-input class="label-buttons" [type]="passwordType" formControlName="password" placeholder="Contraseña" required (click)="clearBooleans()" clearOnEdit="false"></ion-input>
+          <ion-icon class="icon-eye" item-end [name]="passwordIcon" (click)="hideShowPassword()"></ion-icon>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignin && errorControl.password.errors?.required">Introduzca contraseña</span>
+      </ion-list>
+      <span class="field-validator error ion-padding" *ngIf="isSignin && userNotExists">Email o contraseña incorrectos</span>
+      <div style="text-align: right; margin-top: 20px; margin-right: 10px;">
+        <a class="ion-link-question" [routerLink]="['/forgot-password']" (click)="clearForm()">¿Ha olvidado su contraseña?</a>
+      </div>
+      <ion-button type="submit" class="ion-button-signin" expand="block" size="small" block>Iniciar sesión</ion-button>
+    </form>
+    <hr />
+    <div padding style="text-align: center;">
+      <ion-label class="label-question">¿Todavía no te has registrado?</ion-label>
+      <a class="ion-link-signup" [routerLink]="['/signup']" (click)="clearForm()">Regístrate</a>
+    </div>
+  </ion-card-content>
+</ion-content>

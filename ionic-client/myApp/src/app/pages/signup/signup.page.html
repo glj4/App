@@ -1,0 +1,61 @@
+<ion-content>
+  <div style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/']" (click)="clearForm()">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <ion-card-header>
+    <img class="logo" src="../../assets/logo2.png"/>
+    <ion-title class="title">TURISTE</ion-title>
+    <ion-title class="title_a">A</ion-title>
+  </ion-card-header>
+  <ion-card-content style="margin-right: 15px; margin-left: 15px; margin-top: 10px;">
+    <ion-label class="label-signup">Regístrate en Turistea</ion-label>
+    <form [formGroup]="orderForm" (ngSubmit)="signUp();">
+      <ion-list>
+        <ion-item>
+          <ion-input class="label-buttons" type="text" formControlName="name" placeholder="Nombre*" required (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && errorControl.name.errors?.required">Campo obligatorio</span>
+        <ion-item>
+          <ion-input class="label-buttons" type="text" formControlName="surname" placeholder="Apellido" (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input class="label-buttons" type="text" maxlength="9" formControlName="phone" placeholder="Teléfono de contacto" (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && (errorControl.phone.errors?.pattern || (errorControl.phone.errors?.minlength || errorControl.phone.errors?.maxlength))">Introduzca un teléfono de contacto válido</span>
+        <ion-item>
+          <ion-input class="label-buttons" type="email" formControlName="email" placeholder="Email*" required (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && errorControl.email.errors?.required">Campo obligatorio</span>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && errorControl.email.errors?.pattern">Introduzca un email válido</span>
+        <ion-item>
+          <ion-input class="label-buttons" [type]="passwordType1" formControlName="password" placeholder="Contraseña*" required cleanOnEdit="true" (click)="clearBooleans()"></ion-input>
+          <ion-icon class="icon-eye" item-end [name]="passwordIcon1" (click)="hideShowPassword1()"></ion-icon>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && errorControl.password.errors?.required">Campo obligatorio</span>
+        <ion-item>
+          <ion-input class="label-buttons" [type]="passwordType2" formControlName="repeatPassword" placeholder="Repetir contraseña*" required cleanOnEdit="true" (click)="clearBooleans()"></ion-input>
+          <ion-icon class="icon-eye" item-end [name]="passwordIcon2" (click)="hideShowPassword2()"></ion-icon>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && errorControl.repeatPassword.errors?.required">Campo obligatorio</span>
+        <span class="field-validator error ion-padding" *ngIf="isSignup && !orderForm.get('repeatPassword').errors && orderForm.hasError('passwordNotMatch')">Las contraseñas no coinciden</span>
+        <div style="margin-left: 15px; margin-top: 15px;">
+          <ion-label class="label-image">Imagen</ion-label>
+          <br>
+          <ion-button [hidden]="buttonShowPhotos()" class="ion-button-select-image" size="small" (click)="newPhoto()" (click)="clearBooleans()">Seleccionar imagen...</ion-button>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6" *ngFor="let photo of getPhotos(); index as position">
+                <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}"></ion-img>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <ion-button [hidden]="!buttonShowPhotos()" class="ion-button-change-image" size="small" block (click)="changePhoto()" (click)="clearBooleans()">Cambiar foto</ion-button>
+        </div>
+      </ion-list>
+      <ion-button type="submit" class="ion-button-signup" expand="block" size="small" block>Registrarme</ion-button>
+    </form>
+  </ion-card-content>
+</ion-content>

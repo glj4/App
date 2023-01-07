@@ -1,0 +1,45 @@
+<ion-content>
+  <div *ngIf="userSvc.comprobarLogin() == false" style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/']" (click)="clearForm()">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <div *ngIf="userSvc.comprobarLogin() == true" style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/tabs/main-page']" (click)="clearForm()">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <ion-card-header>
+    <img class="logo" src="../../assets/logo2.png"/>
+    <ion-title class="title">TURISTE</ion-title>
+    <ion-title class="title_a">A</ion-title>
+  </ion-card-header>
+  <ion-card-content style="margin-right: 15px; margin-left: 15px; margin-top: 10px;">
+    <ion-label class="label-contact">Contacta con Turistea</ion-label>
+    <br>
+    <ion-label class="label-text">
+      Si tiene alguna pregunta para nosotros no dude en enviernos un correo electrónico con todas sus dudas. Le contestaremos lo antes posible.
+    </ion-label>
+    <form [formGroup]="orderForm" (ngSubmit)="contactUs();">
+      <ion-list>
+        <ion-item *ngIf="userSvc.comprobarLogin() == false">
+          <ion-input class="label-buttons" type="text" formControlName="email" placeholder="Email" (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="userSvc.comprobarLogin() == false && isContact && errorControl.email.errors?.required">Introduzca email</span>
+        <span class="field-validator error ion-padding" *ngIf="userSvc.comprobarLogin() == false && isContact && errorControl.email.errors?.pattern">Introduce un email válido</span>
+        <ion-item *ngIf="userSvc.comprobarLogin() == true">
+          <ion-input class="label-email" type="text" formControlName="email">{{email}}</ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input class="label-buttons" type="text" maxlength="9" formControlName="phone" placeholder="Teléfono de contacto" (click)="clearBooleans()"></ion-input>
+        </ion-item>
+        <span class="field-validator error ion-padding" *ngIf="isContact && (errorControl.phone.errors?.pattern || (errorControl.phone.errors?.minlength || errorControl.phone.errors?.maxlength))">Introduzca un teléfono de contacto válido</span>
+        <textarea class="ion-textarea" formControlName="textarea" placeholder="Escriba su pregunta..." (click)="clearBooleans()" required></textarea>
+        <span class="field-validator error ion-padding" *ngIf="isContact && errorControl.textarea.errors?.required" (click)="clearBooleans()">Introduzca una pregunta</span>
+      </ion-list>
+      <ion-button type="submit" class="ion-button-contact" expand="block" size="small" block>Enviar</ion-button>
+    </form>
+  </ion-card-content>
+</ion-content>

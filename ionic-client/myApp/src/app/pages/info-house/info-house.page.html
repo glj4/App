@@ -1,0 +1,95 @@
+<ion-content>
+  <div style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" (click)="goBack()">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <div style="text-align:right;">
+    <a>
+      <ion-icon class="icon-favourite" [name]="heartIcon" (click)="addFavourite()"></ion-icon>
+    </a>
+  </div>
+  <div class="content" *ngIf="house != undefined">
+    <ion-item-sliding>
+      <ion-slides pager="true">
+        <ion-slide *ngFor="let image of house.images">
+          <img [src]="image"/>
+        </ion-slide>
+      </ion-slides>
+    </ion-item-sliding>
+    <br>
+    <ion-label class="ion-label-name">{{house.name}}</ion-label>
+    <br>
+    <div *ngIf="!showModalAvailable && !checkAvailable">
+      <textarea>{{house.description}}</textarea>
+      <hr style="border-top: 2px solid #AAAAAA;">
+      <ion-label class="ion-label-options" style="margin-left: 20px;">Habitaciones</ion-label>
+      <ion-label class="ion-label-characteristics" style="margin-left: 172px;">{{house.rooms}}</ion-label>
+      <hr style="margin-left: 20px; margin-right: 20px; margin-top: 5px; margin-bottom: 5px; border-top: 1px solid #AAAAAA;">
+      <ion-label class="ion-label-options" style="margin-left: 20px;">Baños</ion-label>
+      <ion-label class="ion-label-characteristics" style="margin-left: 212px;">{{house.baths}}</ion-label>
+      <hr style="margin-left: 20px; margin-right: 20px; margin-top: 5px; margin-bottom: 5px; border-top: 1px solid #AAAAAA;">
+      <ion-label class="ion-label-options" style="margin-left: 20px;">Fecha</ion-label>
+      <ion-label class="ion-label-characteristics" style="margin-left: 85px;" *ngIf="dateIn != undefined && dateOut != undefined">{{dateIn}} - {{dateOut}}</ion-label>
+      <ion-label class="ion-label-characteristics" style="margin-left: 215px;" *ngIf="dateIn == undefined && dateOut == undefined">-</ion-label>
+      <hr style="margin-left: 20px; margin-right: 20px; margin-top: 5px; margin-bottom: 5px; border-top: 1px solid #AAAAAA;">
+      <ion-label class="ion-label-options" style="margin-left: 20px;">Número de personas</ion-label>
+      <ion-label class="ion-label-characteristics" style="margin-left: 125px;">{{house.people}}</ion-label>
+      <hr style="margin-left: 20px; margin-right: 20px; margin-top: 5px; margin-bottom: 5px; border-top: 1px solid #AAAAAA;">
+      <ion-label class="ion-label-options" style="margin-left: 20px;">Precio</ion-label>
+      <ion-label class="ion-label-characteristics" style="margin-left: 160px;">{{house.price}}€/noche</ion-label>
+      <hr style="border-top: 2px solid #AAAAAA;">
+      <!--<div *ngIf="this.house.ubication" #map class="map"></div>-->
+      <ion-button *ngIf="dateIn == undefined && dateOut == undefined" class="ion-button-like" expand="block" size="small" block (click)="isAvailable()">Ver disponibilidad</ion-button>
+      <ion-button *ngIf="dateIn != undefined && dateOut != undefined" class="ion-button-like" expand="block" size="small" block>Realizar reserva</ion-button>
+    </div>
+    <div *ngIf="showModalAvailable && !checkAvailable">
+      <br>
+      <ion-grid>
+        <ion-row>
+          <ion-label style="color:#0021F5; font-size:14px;">Seleccione la fecha de entrada</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-col class="search-dateIn">
+            <ion-icon class="icon-date" name="calendar-clear-outline"></ion-icon>
+            <ion-datetime [(ngModel)]="dateInSearch" cancel-text="Cancelar" done-text="Aceptar" [min]="myDate" [max]="2030" placeholder="Calendario" [pickerOptions]="customPickerOptionDateIn"></ion-datetime>
+          </ion-col>
+        </ion-row>
+        <br>
+        <ion-row>
+          <ion-label style="color:#0021F5; font-size:14px;">Seleccione la fecha de salida</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-col class="search-dateOut">
+            <ion-icon class="icon-date" name="calendar-clear-outline"></ion-icon>
+            <ion-datetime [(ngModel)]="dateOutSearch" cancel-text="Cancelar" done-text="Aceptar" [min]="followingDay" [max]="2030" placeholder="Calendario" [pickerOptions]="customPickerOptionDateOut"></ion-datetime>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <br>
+      <ion-button *ngIf="dateIn != undefined && dateOut != undefined" class="ion-button-like" expand="block" size="small" block (click)="comprobarDisponibilidad(house._id)">Ver disponibilidad</ion-button>
+    </div>
+    <div style="margin-left:15px; margin-right:15px; margin-top:10px;" *ngIf="checkAvailable">
+      <br>
+      <ion-label style="color:#0021F5; font-size:14px;">Fecha</ion-label>
+      <div class="dates">
+        <h4 style="font-size:15px;">{{dateIn}}-{{dateOut}}</h4>
+      </div>
+      <br>
+      <div *ngIf="available" style="text-align:center;">
+        <ion-label style="font-size:14px;">Esta casa está disponible para las fechas seleccionadas</ion-label>
+        <br>
+        <br>
+        <ion-label style="font-size:15px;">¡¡ HAZ TU RESERVA Y QUE NO TE LA QUITEN !!</ion-label>
+        <ion-button style="margin-top:20px;" class="ion-button-like" expand="block" size="small" block>Realizar reserva</ion-button>
+      </div>
+      <div *ngIf="!available">
+        <ion-label class="text-red">Lo sentimos, para estas fechas la casa está ocupada</ion-label>
+        <br>
+        <br>
+        <ion-button style="margin-top:20px;" class="ion-button-like" expand="block" size="small" block [routerLink]="['/tabs/main-page']">Seguir explorando</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>
