@@ -27,6 +27,7 @@ export class MainPagePage implements OnInit {
   dateOut: string;
   dateInSearch: string;
   dateOutSearch: string;
+  experiencesPublished: any[] = [];
 
   constructor(
     public route:Router,
@@ -47,6 +48,11 @@ export class MainPagePage implements OnInit {
     this._experiences.getExperiences()
       .subscribe((experience:any) => {
         this.experiences = experience.docs;
+        for (let experience of this.experiences) {
+          if (experience['isPublished'] == true) {
+            this.experiencesPublished.push(experience);
+          }
+        }
       });
     this._hotels.getHotels()
       .subscribe((hotel:any) => {
@@ -59,7 +65,7 @@ export class MainPagePage implements OnInit {
   }
 
   sortExperiences() {
-    return this.experiences.sort((b, a) => b.finalPrice - a.finalPrice);
+    return this.experiencesPublished.sort((b, a) => b.finalPrice - a.finalPrice);
   }
 
   sortHotels() {

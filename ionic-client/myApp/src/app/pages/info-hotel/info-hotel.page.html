@@ -90,7 +90,7 @@
         <ion-label class="text-red">Lo sentimos, para estas fechas no hay habitaciones disponibles</ion-label>
         <br>
         <br>
-        <ion-button style="margin-top:20px;" class="ion-button-like" expand="block" size="small" block [routerLink]="['/tabs/main-page']">Seguir explorando</ion-button>
+        <ion-button style="margin-top:20px;" class="ion-button-like" expand="block" size="small" block (click)="seguirExplorando()">Seguir explorando</ion-button>
       </div>
     </div>
     <div *ngIf="doBooking">
@@ -132,7 +132,7 @@
         </ion-grid>
         <hr style="border-top: 1px solid #AAAAAA;">
         <div *ngIf="points != undefined" style="text-align:center;">
-          <a style="color:#000000; text-decoration-line:underline; font-size:14px;">Puntos disponibles: {{points}}</a>
+          <a style="color:#000000; text-decoration-line:underline; font-size:14px;" (click)="presentAlert(points)">Puntos disponibles: {{points}}</a>
         </div>
         <div *ngIf="points == undefined" style="text-align:center;">
           <ion-label>No tienes puntos</ion-label>
@@ -146,6 +146,22 @@
           </ion-col>
           <ion-col *ngIf="precioNoches != undefined">
             <ion-label style="font-size:14px;">{{precioNoches}}€</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row style="text-align:center" *ngIf="pointsToDiscount != undefined && pointsToDiscount != 0">
+          <ion-col size="8">
+            <ion-label style="font-size:11px; color:red">Descuento puntos</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label style="font-size:11px; color:red">-{{pointsToDiscount*0.5}}€</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row style="text-align:center" *ngIf="totalPriceWithDiscount != undefined && totalPriceWithDiscount != precioNoches">
+          <ion-col size="8">
+            <ion-label style="font-size:14px;">TOTAL CON DESCUENTO</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label style="font-size:14px;">{{totalPriceWithDiscount}}€</ion-label>
           </ion-col>
         </ion-row>
       </ion-grid>

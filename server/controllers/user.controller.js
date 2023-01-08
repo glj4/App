@@ -49,7 +49,7 @@ userCtrl.updateUser = async (req, res) => {
         password: req.body.password != undefined ? req.body.password : userSaved.password,
         points: req.body.points != undefined ? req.body.points : userSaved.points,
         bookings: req.body.bookings != undefined ? req.body.bookings : userSaved.bookings,
-        tripsPublished: req.body.tripsPublished != undefined ? req.body.tripsPublished : userSaved.tripsPublished,
+        trips: req.body.trips != undefined ? req.body.trips : userSaved.trips,
         favorites: req.body.favorites != undefined ? req.body.favorites : userSaved.favorites,
         likes: req.body.likes != undefined ? req.body.likes : userSaved.likes
     };

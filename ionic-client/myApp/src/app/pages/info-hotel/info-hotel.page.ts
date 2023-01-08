@@ -42,6 +42,8 @@ export class InfoHotelPage implements OnInit {
   points: number = 0;
   noches: number;
   precioNoches: number;
+  pointsToDiscount: number;
+  totalPriceWithDiscount: number;
 
   constructor(
     private hotelSvc: HotelsService,
@@ -382,7 +384,7 @@ export class InfoHotelPage implements OnInit {
   }
 
   realizarReserva(id: string) {
-    var forma = {
+    var formaHotel = {
       startDatetime: this.dateIn,
       endDatetime: this.dateOut
     }
@@ -392,11 +394,19 @@ export class InfoHotelPage implements OnInit {
         bookings.push(booking);
       }
     }
-    bookings.push(forma);
+    bookings.push(formaHotel);
     this.hotelSvc.updateHotel(id, {bookings:bookings})
     .subscribe(() => {
       console.log('Reserva guardada en hotel');
     });
+    var formaUser = {
+      startDatetime: this.dateIn,
+      endDatetime: this.dateOut,
+      _id: this.hotel._id,
+      images: this.hotel.images,
+      name: this.hotel.name,
+      location: this.hotel.location
+    }
     const email = localStorage.getItem('email');
     var bookingsUser: any[] = [];
     this.userSvc.getUserByEmail(email)
@@ -406,15 +416,82 @@ export class InfoHotelPage implements OnInit {
             bookingsUser.push(booking);
           }
         }
-        bookingsUser.push(forma);
-        this.userSvc.editUser(user['_id'], {bookings:bookingsUser})
-        .subscribe(() => {
-          console.log('Reserva guardada en usuario');
-        })
+        bookingsUser.push(formaUser);
+        if (this.pointsToDiscount != undefined) {
+          var points = user['points'] - this.pointsToDiscount;
+          this.userSvc.editUser(user['_id'], {bookings:bookingsUser, points:points})
+          .subscribe(() => {
+            console.log('Reserva guardada en usuario');
+          });
+        } else {
+          this.userSvc.editUser(user['_id'], {bookings:bookingsUser})
+          .subscribe(() => {
+            console.log('Reserva guardada en usuario');
+          });
+        }
       });
-    this.router.navigate(['/tabs/main-page']);
-    this.doBooking = false;
-    this.checkAvailable = false;
+    this.presentAlertBooking();
+  }
+
+  addPoints(points: any, data: any) {
+    this.pointsToDiscount = data;
+    if (data > points) {
+      this.pointsToDiscount = points;
+    }
+    this.calcularPrecioConDescuento();
+  }
+
+  calcularPrecioConDescuento() {
+    this.totalPriceWithDiscount = this.noches*this.hotel.price - this.pointsToDiscount*0.5;
+  }
+
+  async presentAlert(points: any) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Tiene ' + points + ' puntos',
+      message: 'Inserte los puntos que desea gastar para obtener un descuento',
+      inputs: [{
+        cssClass: 'textbox-class',
+        type: 'number',
+        min: 0,
+        max: points
+      }],
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: (data) => {
+            this.addPoints(points, data[0]);
+          }
+        },
+        {
+          text: 'Cancelar'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async presentAlertBooking() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      message: 'Su reserva se ha realizado correctamente',
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.router.navigate(['/tabs/main-page']);
+            this.doBooking = false;
+            this.checkAvailable = false;
+            this.showModalAvailable = false;
+            this.dateIn = undefined;
+            this.dateOut = undefined;
+            this.dateInSearch = undefined;
+            this.dateOutSearch = undefined;
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   goBack() {
@@ -422,5 +499,16 @@ export class InfoHotelPage implements OnInit {
     this.checkAvailable = false;
     this.doBooking = false;
     this.router.navigate(['/tabs/main-page']);
+  }
+
+  seguirExplorando() {
+    this.doBooking = false;
+    this.checkAvailable = false;
+    this.showModalAvailable = false;
+    this.dateIn = undefined;
+    this.dateOut = undefined;
+    this.dateInSearch = undefined;
+    this.dateOutSearch = undefined;
+    this.router.navigate(['tabs/main-page']);
   }
 }

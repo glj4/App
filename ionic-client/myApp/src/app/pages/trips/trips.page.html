@@ -1,9 +1,49 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>trips</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
+  <div style="margin-left: 30px; margin-top: 20px;">
+    <a class="ion-link-back" [routerLink]="['/tabs/main-page']">
+      <ion-icon class="icon" name="chevron-back-outline"></ion-icon>
+      Volver
+    </a>
+  </div>
+  <div class="content">
+    <div style="text-align:center">
+      <ion-label>MIS VIAJES</ion-label>
+      <br *ngIf="trips == null || trips.length == 0">
+      <br *ngIf="trips == null || trips.length == 0">
+      <ion-label style="color:red; font-size:12px;" *ngIf="trips == null || trips.length == 0">Todavía no has creado ningún viaje</ion-label>
+    </div>
+    <ion-grid fixed *ngIf="trips != undefined">
+      <ion-row>
+        <ion-col *ngFor="let trip of trips">
+          <a style="margin-right:15px" (click)="routeById(trip._id)">
+              <img [src]="trip.images[0]"/>
+              <h4 class="text-block">{{trip.location}}</h4>
+          </a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div style="text-align:center; margin-top:30px;">
+      <ion-label style="margin-top:20px;">PRÓXIMAS RESERVAS</ion-label>
+      <br *ngIf="bookings == null || bookings.length == 0">
+      <br *ngIf="bookings == null || bookings.length == 0">
+      <ion-label style="color:red; font-size:12px;" *ngIf="bookings == null || bookings.length == 0">No tienes ninguna reserva en las próximas fechas</ion-label>
+    </div>
+    <ion-grid fixed *ngIf="bookings != undefined">
+      <ion-row>
+        <ion-col *ngFor="let booking of bookings">
+          <a style="margin-right:15px" (click)="routeById(booking._id)">
+              <img [src]="booking.images[0]"/>
+              <h4 class="text-block">{{booking.location}}</h4>
+          </a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <hr>
+    <ion-row style="text-align:center">
+      <ion-col>
+        <ion-label class="label-new-trip">¿Desea crear un nuevo viaje?</ion-label>
+        <a class="link-new-trip">Nuevo viaje</a>
+      </ion-col>
+    </ion-row>
+  </div>
 </ion-content>

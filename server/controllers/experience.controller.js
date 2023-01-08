@@ -32,14 +32,15 @@ experienceCtrl.createExperience = async (req, res) => {
 
 experienceCtrl.updateExperience = async (req, res) => {
     const { id } = req.params;
+    const experienceSaved = await Experience.findById(id);
     const experience = {
-        user: req.body.user,
-        title: req.body.title,
-        description: req.body.description,
-        location: req.body.location,
-        finalPrice: req.body.finalPrice,
-        images: req.body.images,
-        isPublished: req.body.isPublished
+        user: req.body.user != undefined ? req.body.user : experienceSaved.user,
+        title: req.body.title != undefined ? req.body.title : experienceSaved.title,
+        description: req.body.description != undefined ? req.body.description : experienceSaved.description,
+        location: req.body.location != undefined ? req.body.location : experienceSaved.location,
+        finalPrice: req.body.finalPrice != undefined ? req.body.finalPrice : experienceSaved.finalPrice,
+        images: req.body.images != undefined ? req.body.images : experienceSaved.images,
+        isPublished: req.body.isPublished != undefined ? req.body.isPublished : experienceSaved.isPublished
     };
     await Experience.findByIdAndUpdate(id, {$set: experience}, {new: true});
     res.json({status: 'Experience update'});

@@ -6,8 +6,21 @@
     </a>
   </div>
   <div style="text-align:right;">
-    <a>
+    <a *ngIf="!isMyExperience">
       <ion-icon class="icon-favourite" [name]="heartIcon" (click)="addOrDeleteFavourite()"></ion-icon>
+    </a>
+    <a *ngIf="isMyExperience" (click)="showOptions();">
+      <ion-icon class="icon-options" name="reorder-three-outline"></ion-icon>
+      <div [hidden]="show == false">
+        <ion-grid>
+          <ion-row class="opciones">
+            <a style="margin-left:5px; color:#000000;">Editar viaje</a>
+          </ion-row>
+          <ion-row class="opciones">
+            <a style="margin-left:5px; color:#000000;">Eliminar viaje</a>
+          </ion-row>
+        </ion-grid>
+      </div>
     </a>
   </div>
   <div class="content" *ngIf="experience != undefined">
@@ -29,7 +42,9 @@
     <ion-label style="margin-left: 10px">Gasto total aproximado</ion-label>
     <ion-label style="margin-left: 70px">{{experience.finalPrice}}€</ion-label>
     <hr>
-    <ion-button *ngIf="!liked" class="ion-button-like" expand="block" size="small" block (click)="like(experience.user)">¡Me gusta!</ion-button>
+    <ion-button *ngIf="!liked && !isMyExperience" class="ion-button-like" expand="block" size="small" block (click)="like(experience.user)">¡Me gusta!</ion-button>
     <ion-button *ngIf="liked" class="ion-button-liked" expand="block" size="small" block>¡Te gusta!</ion-button>
+    <ion-button *ngIf="isMyExperience && !isPublished" class="ion-button-like" expand="block" size="small" block (click)="presentAlertPublish(experience._id)">Publicar</ion-button>
+    <ion-button *ngIf="isPublished" class="ion-button-liked" expand="block" size="small" block>PUBLICADO</ion-button>
   </div>
 </ion-content>

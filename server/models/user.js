@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     phone: { type: String, required: false },
     points: { type: Number, required: false },
     bookings: { type: JSON, required: false },
-    tripsPublished: { type: JSON, requried: false },
+    trips: { type: JSON, required: false },
     favorites: { type: JSON, required: false },
     likes: { type: JSON, required: false },
     tokenResetPassword: { type: String }

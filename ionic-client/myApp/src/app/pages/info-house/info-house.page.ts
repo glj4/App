@@ -39,6 +39,12 @@ export class InfoHousePage implements OnInit {
   checkAvailable: boolean = false;
   myDate: string;
   available: boolean = false;
+  doBooking: boolean = false;
+  points: number = 0;
+  noches: number;
+  precioNoches: number;
+  pointsToDiscount: number;
+  totalPriceWithDiscount: number;
 
   constructor(
     private houseSvc: HousesService,
@@ -71,6 +77,9 @@ export class InfoHousePage implements OnInit {
             this.heartIcon = 'heart';
           } else {
             this.heartIcon = 'heart-outline';
+          }
+          if (user['points'] != undefined) {
+            this.points = user['points'];
           }
         });
     });
@@ -338,9 +347,154 @@ export class InfoHousePage implements OnInit {
     });
   }
 
+  gestionarReserva() {
+    this.doBooking = true;
+    this.noches = this.calcularNoches();
+    this.precioNoches = this.calcularPrecio();
+  }
+
+  calcularNoches() {
+    const dayIn = Number.parseInt(this.dateIn.split('/')[0]);
+    const monthIn = Number.parseInt(this.dateIn.split('/')[1]);
+    const yearIn = Number.parseInt(this.dateIn.split('/')[2]);
+    var dateInFormat = new Date(yearIn, monthIn-1, dayIn);
+    const dayOut = Number.parseInt(this.dateOut.split('/')[0]);
+    const monthOut = Number.parseInt(this.dateOut.split('/')[1]);
+    const yearOut = Number.parseInt(this.dateOut.split('/')[2]);
+    var dateOutFormat = new Date(yearOut, monthOut-1, dayOut);
+    var diff = dateOutFormat.getTime() - dateInFormat.getTime();
+    return diff/(1000*60*60*24);
+  }
+
+  calcularPrecio() {
+    return this.noches*this.house.price;
+  }
+
+  realizarReserva(id: string) {
+    var formaHouse = {
+      startDatetime: this.dateIn,
+      endDatetime: this.dateOut
+    }
+    var bookings: any[] = [];
+    if (this.house.bookings != undefined) {
+      for (let booking of this.house.bookings) {
+        bookings.push(booking);
+      }
+    }
+    bookings.push(formaHouse);
+    this.houseSvc.updateHouse(id, {bookings:bookings})
+    .subscribe(() => {
+      console.log('Reserva guardada en hotel');
+    });
+    const email = localStorage.getItem('email');
+    var bookingsUser: any[] = [];
+    var formaUser = {
+      startDatetime: this.dateIn,
+      endDatetime: this.dateOut,
+      _id: this.house._id,
+      images: this.house.images,
+      name: this.house.name,
+      location: this.house.location
+    }
+    this.userSvc.getUserByEmail(email)
+      .subscribe((user) => {
+        if (user['bookings'] != undefined) {
+          for (let booking of user['bookings']) {
+            bookingsUser.push(booking);
+          }
+        }
+        bookingsUser.push(formaUser);
+        if (this.pointsToDiscount != undefined) {
+          var points = user['points'] - this.pointsToDiscount;
+          this.userSvc.editUser(user['_id'], {bookings:bookingsUser, points:points})
+          .subscribe(() => {
+            console.log('Reserva guardada en usuario');
+          });
+        } else {
+          this.userSvc.editUser(user['_id'], {bookings:bookingsUser})
+          .subscribe(() => {
+            console.log('Reserva guardada en usuario');
+          });
+        }
+      });
+    this.presentAlertBooking();
+  }
+
+  addPoints(points: any, data: any) {
+    this.pointsToDiscount = data;
+    if (data > points) {
+      this.pointsToDiscount = points;
+    }
+    this.calcularPrecioConDescuento();
+  }
+
+  calcularPrecioConDescuento() {
+    this.totalPriceWithDiscount = this.noches*this.house.price - this.pointsToDiscount*0.5;
+  }
+
+  async presentAlert(points: any) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Tiene ' + points + ' puntos',
+      message: 'Inserte los puntos que desea gastar para obtener un descuento',
+      inputs: [{
+        cssClass: 'textbox-class',
+        type: 'number',
+        min: 0,
+        max: points
+      }],
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: (data) => {
+            this.addPoints(points, data[0]);
+          }
+        },
+        {
+          text: 'Cancelar'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async presentAlertBooking() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      message: 'Su reserva se ha realizado correctamente',
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.router.navigate(['/tabs/main-page']);
+            this.doBooking = false;
+            this.checkAvailable = false;
+            this.showModalAvailable = false;
+            this.dateIn = undefined;
+            this.dateOut = undefined;
+            this.dateInSearch = undefined;
+            this.dateOutSearch = undefined;
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   goBack() {
     this.showModalAvailable = false;
     this.checkAvailable = false;
     this.router.navigate(['/tabs/main-page']);
+  }
+
+  seguirExplorando() {
+    this.doBooking = false;
+    this.checkAvailable = false;
+    this.showModalAvailable = false;
+    this.dateIn = undefined;
+    this.dateOut = undefined;
+    this.dateInSearch = undefined;
+    this.dateOutSearch = undefined;
+    this.router.navigate(['tabs/main-page']);
   }
 }

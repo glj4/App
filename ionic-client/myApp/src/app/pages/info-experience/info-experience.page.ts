@@ -19,7 +19,10 @@ export class InfoExperiencePage implements OnInit {
   favorites: any[] = [];
   likes: any[] = [];
   liked: boolean;
-  
+  isMyExperience: boolean = false;
+  isPublished: boolean = false;
+  show: boolean = false;
+
   constructor(
     private experienceSvc: ExperiencesService,
     private userSvc: UsersService,
@@ -60,6 +63,12 @@ export class InfoExperiencePage implements OnInit {
             this.liked = true;
           } else {
             this.liked = false;
+          }
+          if (email === this.experience.user) {
+            this.isMyExperience = true;
+            if (this.experience.isPublished) {
+              this.isPublished = true;
+            }
           }
         });
     });
@@ -154,34 +163,30 @@ export class InfoExperiencePage implements OnInit {
   like(email: string) {
     let points = 0;
     const emailLogin = localStorage.getItem('email');
-    if (email === emailLogin) {
-      this.presentAlertUser();
-    } else {
-      if (!this.liked) {
-        this.userSvc.getUserByEmail(emailLogin)
-        .subscribe((user) => {
-          if (user['likes'] != undefined) {
-            for (let like of user['likes']) {
-              this.likes.push(like);
-            }
+    if (!this.liked) {
+      this.userSvc.getUserByEmail(emailLogin)
+      .subscribe((user) => {
+        if (user['likes'] != undefined) {
+          for (let like of user['likes']) {
+            this.likes.push(like);
           }
-          this.likes.push(this.experience);
-          this.liked = true;
-          this.userSvc.editUser(user['_id'], {likes: this.likes})
-              .subscribe(() => {});
-        });
-        this.userSvc.getUserByEmail(email)
-        .subscribe((user) => {
-          if (user['points'] != undefined) {
-            points = user['points'];
-          }
-          points += 5;
-          this.userSvc.editUser(user['_id'], {points: points})
-              .subscribe(() => {
-                this.presentAlertPoints(email);
-              });
-        });
-      }
+        }
+        this.likes.push(this.experience);
+        this.liked = true;
+        this.userSvc.editUser(user['_id'], {likes: this.likes})
+            .subscribe(() => {});
+      });
+      this.userSvc.getUserByEmail(email)
+      .subscribe((user) => {
+        if (user['points'] != undefined) {
+          points = user['points'];
+        }
+        points += 5;
+        this.userSvc.editUser(user['_id'], {points: points})
+            .subscribe(() => {
+              this.presentAlertPoints(email);
+            });
+      });
     }
   }
 
@@ -199,13 +204,30 @@ export class InfoExperiencePage implements OnInit {
     await alert.present();
   }
 
-  async presentAlertUser() {
+  showOptions() {
+    if (this.show) {
+      this.show = false;
+    } else {
+      this.show = true;
+    }
+  }
+
+  async presentAlertPublish(id: any) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      message: 'Esta experiencia la has creado tú mismo',
+      message: '¿Desea publicar su viaje?',
       buttons: [
         {
-          text: 'Aceptar'
+          text: 'Aceptar',
+          handler: () => {
+            this.experienceSvc.updateExperience(id, {isPublished:true})
+            .subscribe(() => {
+              window.location.reload();
+            })
+          }
+        },
+        {
+          text: 'Cancelar'
         }
       ]
     });

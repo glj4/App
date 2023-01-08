@@ -44,11 +44,11 @@
           <ion-label class="valores" *ngIf="user != undefined && user.bookings == undefined">0</ion-label>
         </ion-col>
         <ion-col class="seccion" style="margin-right:5px;">
-          <ion-label>Viajes publicados</ion-label>
+          <ion-label>Viajes creados</ion-label>
           <br>
           <br>
-          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished != undefined">{{user.tripsPublished.length}}</ion-label>
-          <ion-label class="valores" *ngIf="user != undefined && user.tripsPublished == undefined">0</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.trips != undefined">{{user.trips.length}}</ion-label>
+          <ion-label class="valores" *ngIf="user != undefined && user.trips == undefined">0</ion-label>
         </ion-col>
         <ion-col class="seccion">
           <div style="margin-top:15px;">
