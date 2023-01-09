@@ -220,14 +220,37 @@ export class InfoExperiencePage implements OnInit {
         {
           text: 'Aceptar',
           handler: () => {
+            const email = localStorage.getItem('email');
+            this.userSvc.getUserByEmail(email)
+              .subscribe((user) => {
+                var points = user['points'] + 5;
+                this.userSvc.editUser(user['_id'], {points:points})
+                .subscribe(() => {});
+              });
             this.experienceSvc.updateExperience(id, {isPublished:true})
-            .subscribe(() => {
-              window.location.reload();
-            })
+            .subscribe(() => {});
+            this.presentAlertNewPoints();
           }
         },
         {
           text: 'Cancelar'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async presentAlertNewPoints() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'ENHORABUENA',
+      message: '¡¡ Has ganado 5 puntos !!',
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            window.location.reload();
+          }
         }
       ]
     });

@@ -344,7 +344,7 @@ export class InfoHotelPage implements OnInit {
           
           if ((dateInFormat.getTime() < bookingDateIn.getTime() && dateOutFormat.getTime() < bookingDateIn.getTime()) ||
               (dateInFormat.getTime() > bookingDateOut.getTime() && dateOutFormat.getTime() > bookingDateOut.getTime())) {
-                console.log('hola');
+                //
               }
               else {
                 cont++;
