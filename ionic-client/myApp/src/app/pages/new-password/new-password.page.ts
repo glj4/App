@@ -43,11 +43,15 @@ export class NewPasswordPage implements OnInit {
   newPassword(){
     this.isNewPassword = true;
     if (this.orderForm.valid) {
-      this.userSvc.newPassword(this.orderForm.value)
-      .subscribe(() => {
-        this.route.navigate(['/login']);
-        this.clearForm();
-      });
+      const email = localStorage.getItem('email');
+      this.userSvc.getUserByEmail(email)
+        .subscribe((user) => {
+          this.userSvc.editUser(user['_id'], {password:this.orderForm.value['password']})
+          .subscribe(() => {
+            this.route.navigate(['/login']);
+            this.clearForm();
+          });
+        });
     }
   }
 

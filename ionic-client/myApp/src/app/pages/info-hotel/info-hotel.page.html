@@ -21,7 +21,7 @@
     <br>
     <ion-label class="ion-label-name">{{hotel.name}}</ion-label>
     <br>
-    <div *ngIf="!showModalAvailable && !checkAvailable">
+    <div *ngIf="!showModalAvailable && !checkAvailable && !doBooking">
       <textarea>{{hotel.description}}</textarea>
       <hr style="border-top: 2px solid #AAAAAA;">
       <ion-label class="ion-label-options" style="margin-left: 20px;">Buffet</ion-label>
@@ -44,7 +44,7 @@
       <hr style="border-top: 2px solid #AAAAAA;">
       <div *ngIf="this.hotel.ubication" #map class="map"></div>
       <ion-button *ngIf="dateIn == undefined && dateOut == undefined" class="ion-button-like" expand="block" size="small" block (click)="isAvailable()">Ver disponibilidad</ion-button>
-      <ion-button *ngIf="dateIn != undefined && dateOut != undefined" class="ion-button-like" expand="block" size="small" block>Realizar reserva</ion-button>
+      <ion-button *ngIf="dateIn != undefined && dateOut != undefined" class="ion-button-like" expand="block" size="small" block (click)="gestionarReserva()">Realizar reserva</ion-button>
     </div>
     <div *ngIf="showModalAvailable && !checkAvailable">
       <br>
