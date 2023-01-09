@@ -88,7 +88,7 @@ export class InfoHousePage implements OnInit {
     if (this.dateIn == undefined && this.dateOut == undefined) {
       this.showModalAvailable = false;
     }
-    //this.init();
+    this.init();
   }
 
   async init() {
